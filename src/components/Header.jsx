@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Menu } from "lucide-react";
+import { config } from "../config";
 
 const Header = ({setIsOpen}) => {
   return (
@@ -8,7 +9,7 @@ const Header = ({setIsOpen}) => {
         to="/"
         className="text-4xl md:text-5xl font-bold text-purple-600 text-shadow-lg text-shadow-gray-500"
       >
-        Cosmart
+        {config.businessName}
       </Link>
       <Link
         to="/products"

@@ -1,3 +1,5 @@
+import { config } from "../config";
+
 export const createWhatsAppOrderLink = (product, phone) => {
     const baseUrl = window.location.origin;
     const imageUrl = `${baseUrl}${product.image}`;
@@ -5,10 +7,10 @@ export const createWhatsAppOrderLink = (product, phone) => {
   const message = `
 Hello 👋
 
-I would like to order:
+${config.orderMessage}
 
 Product: ${product.name}
-Price: ₦${product.price.toLocaleString()}
+Price: ${config.currency}${product.price.toLocaleString()}
 Product ID: ${product.id}
 
 Product Image:

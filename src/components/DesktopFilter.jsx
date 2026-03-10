@@ -1,55 +1,19 @@
-const DesktopFilter = ({ filters, setFilters, maxPrice }) => {
+import { config } from "../config";
 
+// categories, brands, genders are derived automatically from the products data in Products.jsx
+// They will be different for every client — no hardcoding here
+const DesktopFilter = ({ filters, setFilters, maxPrice, categories, brands, genders }) => {
+
+  // Adds or removes a value from any filter list (category, brand, or gender)
+  // key  → which filter to change, e.g. "brand"
+  // value → what to toggle, e.g. "Dior"
   const toggleFilter = (key, value) => {
     setFilters((prev) => ({
       ...prev,
       [key]: prev[key].includes(value)
-        ? prev[key].filter((item) => item !== value)
-        : [...prev[key], value],
+        ? prev[key].filter((item) => item !== value) // already selected → remove it
+        : [...prev[key], value],                      // not selected → add it
     }));
-  };
-
-  const handleCategoryChange = (category) => {
-    setFilters((prev) => {
-      const isSelected = prev.category.includes(category);
-
-      if (isSelected) {
-        return {
-          ...prev,
-          category: prev.category.filter((item) => item !== category),
-          ...(category === "Perfumes" && {
-            gender: [],
-            maleScent: [],
-            femaleScent: [],
-          }),
-        };
-      }
-
-      return {
-        ...prev,
-        category: [...prev.category, category],
-      };
-    });
-  };
-
-  const handleGenderChange = (gender) => {
-    setFilters((prev) => {
-      const isSelected = prev.gender.includes(gender);
-
-      if (isSelected) {
-        return {
-          ...prev,
-          gender: prev.gender.filter((g) => g !== gender),
-          ...(gender === "Male" && { maleScent: [] }),
-          ...(gender === "Female" && { femaleScent: [] }),
-        };
-      }
-
-      return {
-        ...prev,
-        gender: [...prev.gender, gender],
-      };
-    });
   };
 
   const clearFilters = () => {
@@ -57,8 +21,6 @@ const DesktopFilter = ({ filters, setFilters, maxPrice }) => {
       category: [],
       brand: [],
       gender: [],
-      maleScent: [],
-      femaleScent: [],
       price: maxPrice,
     });
   };
@@ -80,140 +42,70 @@ const DesktopFilter = ({ filters, setFilters, maxPrice }) => {
       <div className="space-y-6">
 
         {/* ════ CATEGORY ════ */}
-        <div>
-          <h3 className="font-medium mb-2 text-black">Category</h3>
-          <div className="space-y-2">
-
-            <label className="flex items-center gap-2 text-black">
-              <input
-                type="checkbox"
-                checked={filters.category.includes("Perfumes")}
-                onChange={() => handleCategoryChange("Perfumes")}
-              />
-              Perfumes
-            </label>
-
-            {filters.category.includes("Perfumes") && (
-              <div className="my-5 space-y-2">
-                <p className="text-sm font-medium text-black">Gender (Optional)</p>
-
-                <div className="flex gap-4">
-
-                  {/* Male */}
-                  <div>
-                    <label className="flex items-center gap-2 text-black">
-                      <input
-                        type="checkbox"
-                        checked={filters.gender.includes("Male")}
-                        onChange={() => handleGenderChange("Male")}
-                      />
-                      Male
-                    </label>
-
-                    {filters.gender.includes("Male") && (
-                      <div className="mt-2 space-y-2">
-                        <p className="text-sm font-medium text-black">Male Scents (Optional)</p>
-                        {["Fresh Aquatic", "Woody", "Spicy", "Sweet"].map((scent) => (
-                          <label key={scent} className="flex items-center gap-2 text-black">
-                            <input
-                              type="checkbox"
-                              checked={filters.maleScent.includes(scent)}
-                              onChange={() => toggleFilter("maleScent", scent)}
-                            />
-                            {scent}
-                          </label>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Female */}
-                  <div>
-                    <label className="flex items-center gap-2 text-black">
-                      <input
-                        type="checkbox"
-                        checked={filters.gender.includes("Female")}
-                        onChange={() => handleGenderChange("Female")}
-                      />
-                      Female
-                    </label>
-
-                    {filters.gender.includes("Female") && (
-                      <div className="mt-2 space-y-2">
-                        <p className="text-sm font-medium text-black">Female Scents (Optional)</p>
-                        {["Floral", "Fruity", "Sweet"].map((scent) => (
-                          <label key={scent} className="flex items-center gap-2 text-black">
-                            <input
-                              type="checkbox"
-                              checked={filters.femaleScent.includes(scent)}
-                              onChange={() => toggleFilter("femaleScent", scent)}
-                            />
-                            {scent}
-                          </label>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Unisex */}
-                  <div>
-                    <label className="flex items-center gap-2 text-black">
-                      <input
-                        type="checkbox"
-                        checked={filters.gender.includes("Unisex")}
-                        onChange={() => handleGenderChange("Unisex")}
-                      />
-                      Unisex
-                    </label>
-                  </div>
-
-                </div>
-              </div>
-            )}
-
-            <label className="flex items-center gap-2 text-black">
-              <input
-                type="checkbox"
-                checked={filters.category.includes("Body Sprays")}
-                onChange={() => handleCategoryChange("Body Sprays")}
-              />
-              Body Sprays
-            </label>
-
-            <label className="flex items-center gap-2 text-black">
-              <input
-                type="checkbox"
-                checked={filters.category.includes("Skincare Products")}
-                onChange={() => handleCategoryChange("Skincare Products")}
-              />
-              Skincare Products
-            </label>
-
+        {/* Only renders if the products data has at least one category */}
+        {categories.length > 0 && (
+          <div>
+            <h3 className="font-medium mb-2 text-black">Category</h3>
+            <div className="space-y-2">
+              {categories.map((category) => (
+                <label key={category} className="flex items-center gap-2 text-black">
+                  <input
+                    type="checkbox"
+                    checked={filters.category.includes(category)}
+                    onChange={() => toggleFilter("category", category)}
+                  />
+                  {category}
+                </label>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* ════ BRAND ════ */}
-        <div>
-          <h3 className="font-medium mb-2 text-black">Brand</h3>
-          <div className="space-y-2">
-            {["Dior", "Nivea"].map((brand) => (
-              <label key={brand} className="flex items-center gap-2 text-black">
-                <input
-                  type="checkbox"
-                  checked={filters.brand.includes(brand)}
-                  onChange={() => toggleFilter("brand", brand)}
-                />
-                {brand}
-              </label>
-            ))}
+        {/* Only renders if at least one product has a brand field */}
+        {brands.length > 0 && (
+          <div>
+            <h3 className="font-medium mb-2 text-black">Brand</h3>
+            <div className="space-y-2">
+              {brands.map((brand) => (
+                <label key={brand} className="flex items-center gap-2 text-black">
+                  <input
+                    type="checkbox"
+                    checked={filters.brand.includes(brand)}
+                    onChange={() => toggleFilter("brand", brand)}
+                  />
+                  {brand}
+                </label>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* ════ GENDER ════ */}
+        {/* Only renders if at least one product has a gender field */}
+        {genders.length > 0 && (
+          <div>
+            <h3 className="font-medium mb-2 text-black">Gender</h3>
+            <div className="space-y-2">
+              {genders.map((gender) => (
+                <label key={gender} className="flex items-center gap-2 text-black">
+                  <input
+                    type="checkbox"
+                    checked={filters.gender.includes(gender)}
+                    onChange={() => toggleFilter("gender", gender)}
+                  />
+                  {gender}
+                </label>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* ════ PRICE ════ */}
         <div>
           <h3 className="font-medium mb-2 text-black">Max Price</h3>
           <p className="text-sm text-gray-500 mb-2">
-            Up to ₦{filters.price.toLocaleString()}
+            Up to {config.currency}{filters.price.toLocaleString()}
           </p>
           <input
             type="range"

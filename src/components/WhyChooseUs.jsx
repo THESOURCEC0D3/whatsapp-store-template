@@ -1,27 +1,8 @@
 import {motion} from "framer-motion";
+import { config } from "../config";
+
 const WhyChooseUs = () => {
-  const features = [
-    {
-      title: "Premium Quality",
-      desc: "Carefully selected perfumes, mists, sprays, and skincare made with high-quality ingredients.",
-    },
-    {
-      title: "For Him & For Her",
-      desc: "Masculine, feminine, and unisex collections for every personality.",
-    },
-    {
-      title: "Long-Lasting Fragrance",
-      desc: "Scents designed to stay fresh and elegant all day.",
-    },
-    {
-      title: "Affordable Luxury",
-      desc: "Experience luxury products without the luxury price tag.",
-    },
-    {
-      title: "Customer Trusted",
-      desc: "Loved by fragrance and skincare enthusiasts.",
-    },
-  ];
+  const features = config.whyChooseUs;
 
   const containerVariants = {
     hidden: { opacity: 0, y: 80},

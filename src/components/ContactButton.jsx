@@ -1,8 +1,7 @@
-const PHONE = 2348065429005;
-const MESSAGE = "I am coming from your website, I want to speak with you";
+import { config } from "../config";
 
 const ContactButton = () => {
-  const whatsappLink = `https://wa.me/${PHONE}?text=${encodeURIComponent(MESSAGE)}`;
+  const whatsappLink = `https://wa.me/${config.whatsappNumber}?text=${encodeURIComponent(config.contactMessage)}`;
 
   return (
     <a

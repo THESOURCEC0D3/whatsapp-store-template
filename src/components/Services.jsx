@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { config } from "../config";
 
 export default function Services() {
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -12,25 +13,7 @@ export default function Services() {
   const [canNext, setCanNext] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  const slides = [
-    {
-      title: "Premium Fragrances",
-      description:
-        "We offer all kinds of perfumes, sprays and body mists for all tastes.",
-      image: "/assets/Manwithperfume.jpg",
-    },
-    {
-      title: "Quick Delivery",
-      description: "Fast and reliable delivery straight to your doorstep.",
-      image: "/assets/quickdelivery.png",
-    },
-    {
-      title: "Luxury Skincare",
-      description:
-        "High quality skincare products designed for radiant beauty.",
-      image: "/assets/Skincare.jpg",
-    },
-  ];
+  const slides = config.services;
 
   const updateButtons = useCallback(() => {
     if (!emblaApi) return;
